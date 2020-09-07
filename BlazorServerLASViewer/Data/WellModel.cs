@@ -2,7 +2,7 @@ using System;
 
 namespace BlazorServerLASViewer.Data
 {
-    public class WeatherForecast
+    public class WellModel
     {
         public DateTime Date { get; set; }
 

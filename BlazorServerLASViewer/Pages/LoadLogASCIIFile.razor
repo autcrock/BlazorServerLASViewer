@@ -1,0 +1,129 @@
+﻿@page "/loadlogasciilasfile"
+@using Domains.WellModel;
+
+<h1>Log ASCII (LAS) file loader</h1>
+
+@*<button class="btn btn-primary" @onclick="LoadLogASCII">Click to select a Log ASCII (LAS) format file</button>*@
+
+<InputFile class="btn btn-primary" OnChange="LoadLogASCII" />
+
+@if (file == null)
+{
+    <p> No file selected</p>
+}
+else
+{
+
+    if (well == null || well.Data == null || well.Data.Headers == null || well.Data.Logs == null)
+    {
+        <p>Loading log ASCII format file : @file.Name (@file.Size bytes)</p>
+    }
+    else
+    {
+        <style>
+            th {
+                padding: 15px;
+            }
+        </style>
+
+        <table>
+            <thead>
+                <tr>
+                    <th> File Name </th>
+                    <th> File Size </th>
+                    <th> Number of Log Headers </th>
+                    <th> Number of Logs </th>
+                    <th> Last Modified </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>@file.Name </td>
+                    <td>@file.Size</td>
+                    <td>@well.Data.Headers.Length</td>
+                    <td>@well.Data.Logs.Length</td>
+                    <td>@file.LastModified.ToShortDateString()</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr size="5" noshade>
+
+        <table>
+            <thead>
+                <tr>
+                    <th> Log Description </th>
+                    <th> Mnemonic </th>
+                    <th> Unit </th>
+                    <th> API Codes </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var quad in well.Data.Headers)
+                {
+                    <tr>
+                        <td>@quad.Name</td>
+                        <td>@quad.Mnemonic</td>
+                        <td>@quad.Unit</td>
+                        <td>@quad.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        @for (var i = 0; i < well.Data.Logs.Length; i++)
+        {
+            <hr size="3" noshade>
+            <table>
+                <thead>
+                    <tr>
+                        <th>@well.Header.Name</th>
+                        <th>@well.Data.Headers[i].Name</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <hr size="2" noshade>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th> Depth (@well.Data.Logs[0][0].DepthUnits) </th>
+                        <th> Datum </th>
+                        <th> Datum Units </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (var j = 0; j < well.Data.Logs[i].Length; j++)
+                    {
+                        <tr>
+                            <td>@well.Data.Logs[i][j].Depth</td>
+                            <td>@well.Data.Logs[i][j].Datum </td>
+                            <td>@well.Data.Logs[i][j].DatumUnits</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+    }
+}
+
+<svg>
+    <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+</svg>
+
+@code {
+    private IFileListEntry file;
+    Well well;
+
+    async Task LoadLogASCII(IFileListEntry[] files)
+    {
+        file = files.FirstOrDefault();
+        well = await Well.GetWellFromFileListEntryAsync(file);
+    }
+}

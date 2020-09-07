@@ -1,0 +1,16 @@
+﻿@page "/loadpointcloudlasfile"
+
+<h1>Point cloud (LAS) file loader</h1>
+
+<p>Current file: @currentFile</p>
+
+<button class="btn btn-primary" @onclick="LoadPointCloud">Click to load a point cloud LAS format file</button>
+
+@code {
+    private string currentFile = "";
+
+    private void LoadPointCloud()
+    {
+        currentFile = "Some LAS formatted pointcloud file";
+    }
+}

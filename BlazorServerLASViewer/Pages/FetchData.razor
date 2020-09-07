@@ -1,7 +1,7 @@
 ﻿@page "/fetchdata"
 
 @using BlazorServerLASViewer.Data
-@inject WeatherForecastService ForecastService
+@inject WellService ForecastService
 
 <h1>Weather forecast</h1>
 
@@ -37,7 +37,7 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private WellModel[] forecasts;
 
     protected override async Task OnInitializedAsync()
     {
