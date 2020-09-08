@@ -1,9 +1,7 @@
 ﻿@page "/loadlogasciilasfile"
-@using Domains.WellModel;
+@using BlazorServerLASViewer.Domains.Well;
 
 <h1>Log ASCII (LAS) file loader</h1>
-
-@*<button class="btn btn-primary" @onclick="LoadLogASCII">Click to select a Log ASCII (LAS) format file</button>*@
 
 <InputFile class="btn btn-primary" OnChange="LoadLogASCII" />
 
@@ -21,7 +19,7 @@ else
     else
     {
         <style>
-            th {
+            th, td {
                 padding: 15px;
             }
         </style>
@@ -63,13 +61,9 @@ else
             <tbody>
                 @foreach (var quad in well.Data.Headers)
                 {
-                    <tr>
-                        <td>@quad.Name</td>
-                        <td>@quad.Mnemonic</td>
-                        <td>@quad.Unit</td>
-                        <td>@quad.Value</td>
-                    </tr>
-                }
+                    <LogHeaderQuadrupleTableHeaderRow quad="quad">
+                    </LogHeaderQuadrupleTableHeaderRow>
+                 }
             </tbody>
         </table>
 
@@ -81,7 +75,7 @@ else
                 <thead>
                     <tr>
                         <th>@well.Header.Name</th>
-                        <th>@well.Data.Headers[i].Name</th>
+                        <th>[LOG: @well.Data.Headers[i].Name ]</th>
                     </tr>
                 </thead>
             </table>
@@ -91,7 +85,7 @@ else
             <table>
                 <thead>
                     <tr>
-                        <th> Depth (@well.Data.Logs[0][0].DepthUnits) </th>
+                        <th> Depth [@well.Data.Logs[0][0].DepthUnits] </th>
                         <th> Datum </th>
                         <th> Datum Units </th>
                     </tr>
@@ -100,11 +94,8 @@ else
                 <tbody>
                     @for (var j = 0; j < well.Data.Logs[i].Length; j++)
                     {
-                        <tr>
-                            <td>@well.Data.Logs[i][j].Depth</td>
-                            <td>@well.Data.Logs[i][j].Datum </td>
-                            <td>@well.Data.Logs[i][j].DatumUnits</td>
-                        </tr>
+                        <LogHeaderQuadrupleTableDatumRow datum="well.Data.Logs[i][j]">
+                        </LogHeaderQuadrupleTableDatumRow>
                     }
                 </tbody>
             </table>

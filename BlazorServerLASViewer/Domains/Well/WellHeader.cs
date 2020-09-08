@@ -1,12 +1,8 @@
-﻿namespace Domains.WellModel
+﻿namespace BlazorServerLASViewer.Domains.Well
 {
     public class WellHeader
     {
         public string Name { get; set; }
-
-        WellHeader()
-        {
-        }
 
         public WellHeader(string name)
         {

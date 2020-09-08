@@ -1,0 +1,14 @@
+﻿@using BlazorServerLASViewer.Domains.Well;
+
+<tr>
+    <td>@quad.Name</td>
+    <td>@quad.Mnemonic</td>
+    <td>@quad.Unit</td>
+    <td>@quad.Value</td>
+</tr>
+
+
+@code {
+    [Parameter]
+    public LogHeaderQuadruple quad { get; set; }
+    }

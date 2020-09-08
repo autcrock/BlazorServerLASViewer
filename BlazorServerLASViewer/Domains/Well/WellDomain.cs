@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
-using static System.String;
-using BlazorInputFile;
+using System.Text;
 using System.Threading.Tasks;
-using System;
+using BlazorInputFile;
 
-namespace Domains.WellModel
+namespace BlazorServerLASViewer.Domains.Well
 {
 
     // A well log internal representation holding metadata in the header member
@@ -16,24 +15,13 @@ namespace Domains.WellModel
     {
         public WellHeader Header { set; get; }
         public LogData Data { set; get; }
-        public string JsonHolder { set; get; }
-
-        public Well()
-        {
-        }
-        public Well(WellHeader header, LogData data)
-        {
-            Header = header;
-            Data = data;
-            JsonHolder = "";
-        }
 
         // Load and parse a LAS file, which only contains numerical well logs.
         // Go the quick and dirty suck it all into memory and string split approach.
         // No error handling.
         // Untested for LAS 3.x files or for contractor specific non-standard variations.
 
-        static public async Task<Well> GetWellFromFileListEntryAsync(IFileListEntry file)
+        public static async Task<Well> GetWellFromFileListEntryAsync(IFileListEntry file)
         {
             string data;
 
@@ -49,25 +37,25 @@ namespace Domains.WellModel
             }
             // The segments of a LAS file are separated by a tilde.
             // Each type of segment has a label.
-            List<string> segments = new List<string>(data.Split('~').Where(seg => !IsNullOrEmpty(seg)));
+            var segments = new List<string>(data.Split('~').Where(seg => !String.IsNullOrEmpty(seg)));
 
             var headerSegments = new List<LogHeaderSegment>();
-            int numberOfLogs = 0;
+            var numberOfLogs = 0;
             
             foreach (var marker in new List<char> { 'O', 'V', 'P', 'W', 'C' }) {
-                var segment = segments.SingleOrDefault(segment => segment[0] == marker);
-                if (segment != null)
+                var segment = segments.SingleOrDefault(s => s[0] == marker);
+                
+                if (segment == null) continue;
+                
+                if (marker == 'C')
                 {
-                    if (marker == 'C')
-                    {
-                        var curveHeaderSegment = new LogHeaderSegment(segment, false);
-                        headerSegments.Add(curveHeaderSegment);
-                        numberOfLogs = curveHeaderSegment.Data.Count;
-                    }
-                    else
-                    {
-                        headerSegments.Add(new LogHeaderSegment(segment, marker == 'O'));
-                    }
+                    var curveHeaderSegment = new LogHeaderSegment(segment, false);
+                    headerSegments.Add(curveHeaderSegment);
+                    numberOfLogs = curveHeaderSegment.Data.Count;
+                }
+                else
+                {
+                    headerSegments.Add(new LogHeaderSegment(segment, marker == 'O'));
                 }
             }
 
@@ -79,7 +67,6 @@ namespace Domains.WellModel
                     segments.Single(segment => segment[0] == 'C'),
                     segments.Single(segment => segment[0] == 'A')
                 ),
-                JsonHolder = ""
             };
 
             return rv;

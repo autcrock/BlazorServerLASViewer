@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Domains.WellModel
+namespace BlazorServerLASViewer.Domains.Well
 {
     public class WellModel
     {
