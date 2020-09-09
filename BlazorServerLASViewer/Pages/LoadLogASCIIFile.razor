@@ -3,7 +3,7 @@
 
 <h1>Log ASCII (LAS) file loader</h1>
 
-<InputFile class="btn btn-primary" OnChange="LoadLogASCII" />
+<InputFile OnChange="LoadLogASCII" />
 
 @if (File == null)
 {
@@ -48,10 +48,7 @@ else
 
         <hr size="5" noshade>
 
-        <WellLogHeadersTable well="@Well"></WellLogHeadersTable>
-
-        <WellLogsTable well="@Well"></WellLogsTable>
-
+        <WellTable well="@Well"></WellTable>
     }
 }
 
