@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorServerLASViewer.Data;
+using BlazorServerLASViewer.Domains.Well;
 
 namespace BlazorServerLASViewer
 {
@@ -23,6 +24,7 @@ namespace BlazorServerLASViewer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WellService>();
+            services.AddSingleton<WellSvg>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

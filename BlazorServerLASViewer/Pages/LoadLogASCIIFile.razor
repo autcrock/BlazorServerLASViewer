@@ -1,9 +1,22 @@
 ﻿@page "/loadlogasciilasfile"
 @using BlazorServerLASViewer.Domains.Well;
 
+@inject IJSRuntime JSRuntime
+@inject WellSvg WellSvg;
+
+
 <h1>Log ASCII (LAS) file loader</h1>
 
 <InputFile OnChange="LoadLogASCII" />
+
+<svg @onmousemove="@MouseMove" class="MainSVG" width="800" height="800" style="background:rgb(200, 200, 200)">
+
+    @foreach (LogSvg r in WellSvg.Logs)
+    {
+        <RectangleElement DataContext="r" ChangeSelected="@ChangeSelected" />
+    }
+
+</svg>
 
 @if (File == null)
 {
@@ -19,7 +32,7 @@ else
     else
     {
         <style>
-            th,td {
+            th, td {
                 padding: 5px;
             }
         </style>
@@ -45,59 +58,80 @@ else
                 </tr>
             </tbody>
         </table>
-
-        <hr size="5" noshade>
-
         <WellTable well="@Well"></WellTable>
-    }
-}
 
-@code {
-    private IFileListEntry File;
-    Well Well;
+        <hr size="5" noshade />
 
-    //public int ContainerX { get; set; } = 0;
-    //public int ContainerY { get; set; } = 0;
-    //public int ElementX { get; set; } = 0;
-    //public int ElementY { get; set; } = 0;
-    //public int ContainerMouseX { get; set; } = 0;
-    //public int ContainerMouseY { get; set; } = 0;
-    //public bool OverChild { get; set; } = false;
-    //public int SelectedItem { get; set; } = -1;
-    //public List<Log> Rectangles { get; set; }
+        <h3>Movement</h3>
 
-    //public MainViewModel()
-    //{
-    //    Initialize();
-    //}
+        <div>OverChild: @WellSvg.OverChild</div>
 
-    //public void Initialize()
-    //{
-    //    Random rnd = new Random();
+        <div>Cursor Position: @WellSvg.ContainerMouseX,@WellSvg.ContainerMouseY</div>
 
-    //    Rectangles = new List<Rectangle>();
+        <div>
+            Element Id:
+            @if (WellSvg.SelectedItem > -1)
+            {
+                @WellSvg.SelectedItem <span> Element Position:</span> @WellSvg.ElementX <span>,</span>@WellSvg.ElementY
+            }
+            else
+            {
+                <span>none</span>
+            }
+        </div>
 
-    //    for (int i = 0; i < 10; i++)
-    //    {
-    //        var r = new Rectangle
-    //        {
-    //            RectangleId = i + 1,
-    //            X = (int)rnd.Next(0, 600),
-    //            Y = (int)rnd.Next(0, 600),
-    //            Width = 20 * (int)rnd.Next(5, 10),
-    //            Height = 20 * (int)rnd.Next(5, 10),
-    //            R = rnd.Next(0, 255),
-    //            G = rnd.Next(0, 255),
-    //            B = rnd.Next(0, 255),
-    //        };
+        @code
+{
+            private IFileListEntry File;
+            Well Well;
 
-    //        Rectangles.Add(r);
-    //    }
-    //}
+            async Task LoadLogASCII(IFileListEntry[] files)
+            {
+                File = files.FirstOrDefault();
+                Well = await Well.GetWellFromFileListEntryAsync(File);
+            }
 
-    async Task LoadLogASCII(IFileListEntry[] files)
-    {
-        File = files.FirstOrDefault();
-        Well = await Well.GetWellFromFileListEntryAsync(File);
+            public void MouseMove(MouseEventArgs e)
+            {
+                WellSvg.ContainerMouseX = (int)e.ClientX - WellSvg.ContainerX;
+                WellSvg.ContainerMouseY = (int)e.ClientY - WellSvg.ContainerY;
+
+                if (WellSvg.SelectedItem > -1)
+                {
+                    var r = WellSvg.Logs[WellSvg.SelectedItem - 1];
+                    var x = WellSvg.ContainerMouseX - r.OriginalX;
+                    var y = WellSvg.ContainerMouseY - r.OriginalY;
+
+                    r.X = x;
+                    r.Y = y;
+
+                    WellSvg.ElementX = x;
+                    WellSvg.ElementY = y;
+
+                }
+            }
+
+            public async void ChangeSelected(string newselected)
+            {
+                //Set an SVG <g> Element over Top in the <svg>
+                //method contained in _Host.cshtml
+                await JSRuntime.InvokeAsync<string>("PlaceOnTop", new object[] { newselected });
+                base.StateHasChanged();
+            }
+
+            //This is called after OnInitialized
+            protected override async void OnAfterRender(bool firstRender)
+            {
+                if (firstRender)
+                {
+                    //Get SVG Position and Pass to the ViewModel
+                    //method contained in _Host.cshtml
+                    var raw = await JSRuntime.InvokeAsync<decimal[]>("ContainerPos", null);
+                    WellSvg.ContainerX = (int)raw[0];
+                    WellSvg.ContainerY = (int)raw[1];
+                }
+                base.OnAfterRender(firstRender);
+            }
+        }
     }
 }

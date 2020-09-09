@@ -33,5 +33,22 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/BlazorInputFile/inputfile.js"></script>
-</body>
+    <script>
+
+        window.ContainerPos = (input) => {
+            var element = document.getElementsByClassName("MainSVG")[0];
+            var rect = element.getBoundingClientRect();
+            return [rect.x, rect.y];
+        }
+
+        window.RemoveElement = (elementId) => {
+            var element = document.getElementById(elementId);
+            element.parentNode.removeChild(element);
+        }
+
+        window.PlaceOnTop = (elementId) => {
+            var element = document.getElementById(elementId);
+            element.parentNode.appendChild(element);
+        }
+    </script></body>
 </html>
