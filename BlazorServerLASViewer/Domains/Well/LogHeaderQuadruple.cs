@@ -5,7 +5,7 @@ namespace BlazorServerLASViewer.Domains.Well
     public class LogHeaderQuadruple
     {
         public string Mnemonic;
-        public string Unit;
+        public string Units;
         public string Value;
         public string Name;
 
@@ -22,7 +22,7 @@ namespace BlazorServerLASViewer.Domains.Well
             if (colonSplit.Length > 1) fourthField = colonSplit[1].Trim();
 
             Mnemonic = firstField;
-            Unit = secondField;
+            Units = secondField;
             Value = thirdField;
             Name = fourthField;
         }

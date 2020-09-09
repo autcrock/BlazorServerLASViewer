@@ -5,22 +5,22 @@
 
 <InputFile class="btn btn-primary" OnChange="LoadLogASCII" />
 
-@if (file == null)
+@if (File == null)
 {
     <p> No file selected</p>
 }
 else
 {
 
-    if (well == null || well.Data == null || well.Data.Headers == null || well.Data.Logs == null)
+    if (Well == null || Well.Data == null || Well.Data.Headers == null || Well.Data.Logs == null)
     {
-        <p>Loading log ASCII format file : @file.Name (@file.Size bytes)</p>
+        <p>Loading log ASCII format file : @File.Name (@File.Size bytes)</p>
     }
     else
     {
         <style>
-            th, td {
-                padding: 15px;
+            th,td {
+                padding: 5px;
             }
         </style>
 
@@ -37,84 +37,70 @@ else
 
             <tbody>
                 <tr>
-                    <td>@file.Name </td>
-                    <td>@file.Size</td>
-                    <td>@well.Data.Headers.Length</td>
-                    <td>@well.Data.Logs.Length</td>
-                    <td>@file.LastModified.ToShortDateString()</td>
+                    <td>@File.Name </td>
+                    <td>@File.Size</td>
+                    <td>@Well.Data.Headers.Length</td>
+                    <td>@Well.Data.Logs.Length</td>
+                    <td>@File.LastModified.ToShortDateString()</td>
                 </tr>
             </tbody>
         </table>
 
         <hr size="5" noshade>
 
-        <table>
-            <thead>
-                <tr>
-                    <th> Log Description </th>
-                    <th> Mnemonic </th>
-                    <th> Unit </th>
-                    <th> API Codes </th>
-                </tr>
-            </thead>
+        <WellLogHeadersTable well="@Well"></WellLogHeadersTable>
 
-            <tbody>
-                @foreach (var quad in well.Data.Headers)
-                {
-                    <LogHeaderQuadrupleTableHeaderRow quad="quad">
-                    </LogHeaderQuadrupleTableHeaderRow>
-                 }
-            </tbody>
-        </table>
+        <WellLogsTable well="@Well"></WellLogsTable>
 
-
-        @for (var i = 0; i < well.Data.Logs.Length; i++)
-        {
-            <hr size="3" noshade>
-            <table>
-                <thead>
-                    <tr>
-                        <th>@well.Header.Name</th>
-                        <th>[LOG: @well.Data.Headers[i].Name ]</th>
-                    </tr>
-                </thead>
-            </table>
-
-            <hr size="2" noshade>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th> Depth [@well.Data.Logs[0][0].DepthUnits] </th>
-                        <th> Datum </th>
-                        <th> Datum Units </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @for (var j = 0; j < well.Data.Logs[i].Length; j++)
-                    {
-                        <LogHeaderQuadrupleTableDatumRow datum="well.Data.Logs[i][j]">
-                        </LogHeaderQuadrupleTableDatumRow>
-                    }
-                </tbody>
-            </table>
-
-        }
     }
 }
 
-<svg>
-    <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
-</svg>
-
 @code {
-    private IFileListEntry file;
-    Well well;
+    private IFileListEntry File;
+    Well Well;
+
+    //public int ContainerX { get; set; } = 0;
+    //public int ContainerY { get; set; } = 0;
+    //public int ElementX { get; set; } = 0;
+    //public int ElementY { get; set; } = 0;
+    //public int ContainerMouseX { get; set; } = 0;
+    //public int ContainerMouseY { get; set; } = 0;
+    //public bool OverChild { get; set; } = false;
+    //public int SelectedItem { get; set; } = -1;
+    //public List<Log> Rectangles { get; set; }
+
+    //public MainViewModel()
+    //{
+    //    Initialize();
+    //}
+
+    //public void Initialize()
+    //{
+    //    Random rnd = new Random();
+
+    //    Rectangles = new List<Rectangle>();
+
+    //    for (int i = 0; i < 10; i++)
+    //    {
+    //        var r = new Rectangle
+    //        {
+    //            RectangleId = i + 1,
+    //            X = (int)rnd.Next(0, 600),
+    //            Y = (int)rnd.Next(0, 600),
+    //            Width = 20 * (int)rnd.Next(5, 10),
+    //            Height = 20 * (int)rnd.Next(5, 10),
+    //            R = rnd.Next(0, 255),
+    //            G = rnd.Next(0, 255),
+    //            B = rnd.Next(0, 255),
+    //        };
+
+    //        Rectangles.Add(r);
+    //    }
+    //}
 
     async Task LoadLogASCII(IFileListEntry[] files)
     {
-        file = files.FirstOrDefault();
-        well = await Well.GetWellFromFileListEntryAsync(file);
+        File = files.FirstOrDefault();
+        Well = await Well.GetWellFromFileListEntryAsync(File);
     }
 }

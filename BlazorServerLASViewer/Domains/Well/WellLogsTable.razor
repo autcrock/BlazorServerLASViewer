@@ -1,0 +1,39 @@
+﻿@using BlazorServerLASViewer.Domains.Well
+
+@for (var i = 0; i < @Well.Data.Logs.Length; i++)
+{
+    <hr size="3" noshade>
+    <table>
+        <thead>
+            <tr>
+                <th>@Well.Header.Name</th>
+                <th>[LOG: @Well.Data.Headers[i].Name ]</th>
+            </tr>
+        </thead>
+    </table>
+
+    <hr size="2" noshade>
+
+    <table>
+        <thead>
+            <tr>
+                <th> Depth [@Well.Data.Logs[0][0].DepthUnits] </th>
+                <th> Datum [@Well.Data.Headers[i].Units]</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (var j = 0; j < @Well.Data.Logs[i].Length; j++)
+            {
+                <LogDatumTableRow datum="@Well.Data.Logs[i][j]"> </LogDatumTableRow>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    [Parameter]
+    public Well Well { get; set; }
+}

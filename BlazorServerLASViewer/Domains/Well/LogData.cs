@@ -49,12 +49,12 @@ namespace BlazorServerLASViewer.Domains.Well
             SampleCount = words.Length / LogCount;
             Logs = new LogDatum<double>[LogCount][];
 
-            var depthUnits = Headers[0].Unit;
+            var depthUnits = Headers[0].Units;
             
             for (var logIndex = 0; logIndex < LogCount; logIndex++)
             {
                 Logs[logIndex] = new LogDatum<double>[SampleCount];
-                var sampleUnits = Headers[logIndex].Unit;
+                var sampleUnits = Headers[logIndex].Units;
 
                 for (var sampleIndex = 0; sampleIndex < SampleCount; sampleIndex++)
                 {
@@ -70,7 +70,7 @@ namespace BlazorServerLASViewer.Domains.Well
                         Logs[logIndex][sampleIndex] = new LogDatum<double>()
                         {
                             Datum = sample,
-                            DatumUnits = depthUnits,
+                            DatumUnits = sampleUnits,
                             Depth = depth,
                             DepthUnits = depthUnits
                         };

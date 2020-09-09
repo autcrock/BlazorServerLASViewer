@@ -1,0 +1,12 @@
+﻿@using BlazorServerLASViewer.Domains.Well;
+
+<tr>
+    <td>@datum.Depth </td>
+    <td>@datum.Datum </td>
+</tr>
+
+
+@code {
+    [Parameter]
+    public LogDatum<double> datum { get; set; }
+}

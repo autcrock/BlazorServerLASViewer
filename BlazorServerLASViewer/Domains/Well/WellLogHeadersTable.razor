@@ -1,0 +1,25 @@
+﻿@using BlazorServerLASViewer.Domains.Well
+
+<table>
+    <thead>
+        <tr>
+            <th> Log Description </th>
+            <th> Mnemonic </th>
+            <th> Unit </th>
+            <th> API Codes </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var quad in Well.Data.Headers)
+        {
+            <LogHeaderQuadrupleTableRow quad="quad"> </LogHeaderQuadrupleTableRow>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    [Parameter]
+    public Well Well { get; set; }
+}
