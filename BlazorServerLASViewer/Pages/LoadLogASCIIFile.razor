@@ -1,7 +1,6 @@
 ﻿@page "/loadlogasciilasfile"
 @using BlazorServerLASViewer.Domains.Well;
 
-@inject IJSRuntime JSRuntime
 @inject WellSvg WellSvg;
 
 
@@ -9,14 +8,7 @@
 
 <InputFile OnChange="LoadLogASCII" />
 
-<svg @onmousemove="@MouseMove" class="MainSVG" width="800" height="800" style="background:rgb(200, 200, 200)">
-
-    @foreach (LogSvg r in WellSvg.Logs)
-    {
-        <RectangleElement DataContext="r" ChangeSelected="@ChangeSelected" />
-    }
-
-</svg>
+<WellSvg></WellSvg>
 
 @if (File == null)
 {
@@ -81,7 +73,7 @@ else
         </div>
 
         @code
-{
+        {
             private IFileListEntry File;
             Well Well;
 
@@ -91,47 +83,6 @@ else
                 Well = await Well.GetWellFromFileListEntryAsync(File);
             }
 
-            public void MouseMove(MouseEventArgs e)
-            {
-                WellSvg.ContainerMouseX = (int)e.ClientX - WellSvg.ContainerX;
-                WellSvg.ContainerMouseY = (int)e.ClientY - WellSvg.ContainerY;
-
-                if (WellSvg.SelectedItem > -1)
-                {
-                    var r = WellSvg.Logs[WellSvg.SelectedItem - 1];
-                    var x = WellSvg.ContainerMouseX - r.OriginalX;
-                    var y = WellSvg.ContainerMouseY - r.OriginalY;
-
-                    r.X = x;
-                    r.Y = y;
-
-                    WellSvg.ElementX = x;
-                    WellSvg.ElementY = y;
-
-                }
-            }
-
-            public async void ChangeSelected(string newselected)
-            {
-                //Set an SVG <g> Element over Top in the <svg>
-                //method contained in _Host.cshtml
-                await JSRuntime.InvokeAsync<string>("PlaceOnTop", new object[] { newselected });
-                base.StateHasChanged();
-            }
-
-            //This is called after OnInitialized
-            protected override async void OnAfterRender(bool firstRender)
-            {
-                if (firstRender)
-                {
-                    //Get SVG Position and Pass to the ViewModel
-                    //method contained in _Host.cshtml
-                    var raw = await JSRuntime.InvokeAsync<decimal[]>("ContainerPos", null);
-                    WellSvg.ContainerX = (int)raw[0];
-                    WellSvg.ContainerY = (int)raw[1];
-                }
-                base.OnAfterRender(firstRender);
-            }
         }
     }
 }

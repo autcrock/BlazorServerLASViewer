@@ -1,5 +1,24 @@
-﻿<h3>Well as SVG view</h3>
-<svg width="800" height="400"> </svg>
+﻿@inject IJSRuntime JSRuntime
+
+<h3>Well as SVG view</h3>
+
+<svg @onmousemove="@MouseMove" class="WellSVG" width="800" height="600" style="background:rgb(200, 200, 200)">
+
+    @foreach (var r in Logs)
+    {
+        <RectangleElement DataContext="r" ChangeSelected="@ChangeSelected" />
+    }
+
+</svg>
+
+@functions{
+    
+    protected override void OnInitialized()
+    {
+        Initialize();
+    }
+
+}
 
 @code {
     [Parameter]
@@ -18,6 +37,47 @@
     public WellSvg()
     {
         Initialize();
+    }
+
+    public void MouseMove(MouseEventArgs e)
+    {
+        ContainerMouseX = (int)e.ClientX - ContainerX;
+        ContainerMouseY = (int)e.ClientY - ContainerY;
+
+        if (SelectedItem > -1)
+        {
+            var r = Logs[SelectedItem - 1];
+            var x = ContainerMouseX - r.OriginalX;
+            var y = ContainerMouseY - r.OriginalY;
+
+            r.X = x;
+            r.Y = y;
+
+            ElementX = x;
+            ElementY = y;
+        }
+    }
+
+    public async void ChangeSelected(string newselected)
+    {
+        //Set an SVG <g> Element over Top in the <svg>
+        //method contained in _Host.cshtml
+        await JSRuntime.InvokeAsync<string>("PlaceOnTop", new object[] { newselected });
+        base.StateHasChanged();
+    }
+
+    //This is called after OnInitialized
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Get SVG Position and Pass to the ViewModel
+            //method contained in _Host.cshtml
+            var raw = await JSRuntime.InvokeAsync<decimal[]>("ContainerPos", null);
+            ContainerX = (int)raw[0];
+            ContainerY = (int)raw[1];
+        }
+        base.OnAfterRender(firstRender);
     }
 
     public void Initialize()

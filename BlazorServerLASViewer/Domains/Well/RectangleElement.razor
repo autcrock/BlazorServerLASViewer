@@ -3,28 +3,19 @@
 
 <g id="@($"Item{DataContext.RectangleId}")">
 
-    <rect style="fill:rgb(@DataContext.R,@DataContext.G,@DataContext.B);cursor:@pointer;"
+    <rect style="cursor:@pointer;"
           @onmousemove="MouseMove"
           @onmousedown="MouseDown"
           @onmouseup="MouseUp"
           @onmouseout="MouseOut"
-          width="@DataContext.Width." height="@DataContext.Height"
-          x="@DataContext.X" y="@DataContext.Y" />
+          
+          x="@DataContext.X"
+          y="@DataContext.Y" />
 
-    <text style="pointer-events: none; -webkit-user-select: none;
--moz-user-select: none; -ms-user-select: none;  user-select: none;"
-          x="@(DataContext.X + 4)" y="@(DataContext.Y + 20)" fill="black">@DataContext.Position</text>
-
-        @*<rect
-                  @onmousemove="MouseMove"
-                  @onmousedown="MouseDown"
-                  @onmouseup="MouseUp"
-                  @onmouseout="MouseOut"
-                  x="@DataContext.X" y="@DataContext.Y">
-            </rect>
-
-            <text style="pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none;"
-                  x="@(DataContext.X + 4)" y="@(DataContext.Y + 20)" fill="black">@DataContext.Position</text>*@
+    <text style="pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none;"
+          x="@(DataContext.X + 4)"
+          y="@(DataContext.Y + 20)"
+          fill="black">@DataContext.Position</text>
 
     </g>
 
