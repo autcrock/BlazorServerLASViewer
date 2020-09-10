@@ -4,9 +4,9 @@
 
 <svg @onmousemove="@MouseMove" class="WellSVG" width="800" height="600" style="background:rgb(200, 200, 200)">
 
-    @foreach (var r in Logs)
+    @foreach (var log in @Well.Data.Logs)
     {
-        <RectangleElement DataContext="r" ChangeSelected="@ChangeSelected" />
+        <RectangleElement DataContext="@Log" ChangeSelected="@ChangeSelected" />
     }
 
 </svg>
@@ -82,20 +82,20 @@
 
     public void Initialize()
     {
-        Random rnd = new Random();
+        //Random rnd = new Random();
 
-        Logs = new List<LogSvg>();
+        //Logs = new List<LogSvg>();
 
-        for (int i = 0; i < 10; i++)
-        {
-            var r = new LogSvg
-            {
-                RectangleId = i + 1,
-                X = (int)rnd.Next(0, 600),
-                Y = (int)rnd.Next(0, 600),
-            };
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    var r = new LogSvg
+        //    {
+        //        RectangleId = i + 1,
+        //        X = (int)rnd.Next(0, 600),
+        //        Y = (int)rnd.Next(0, 600),
+        //    };
 
-            Logs.Add(r);
-        }
+        //    Logs.Add(r);
+        //}
     }
 }
