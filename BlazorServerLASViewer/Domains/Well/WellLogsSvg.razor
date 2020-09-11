@@ -1,10 +1,10 @@
 ﻿@using BlazorServerLASViewer.Domains.Well
 
-@for (var i = 0; i < @Well.Data.Logs.Length; i++)
+@for (var i = 0; i < @Well.DoubleLogs.Logs.Length; i++)
 {
-        @for (var j = 0; j < @Well.Data.Logs[i].Length; j++)
+        @for (var j = 0; j < @Well.DoubleLogs.Logs[i].Length; j++)
         {
-            <LogDatumSvgTrace datum="@Well.Data.Logs[i][j]"> </LogDatumSvgTrace>
+            <LogDatumSvgTrace datum="@Well.DoubleLogs.Logs[i][j]"> </LogDatumSvgTrace>
         }
 }
 

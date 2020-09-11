@@ -1,60 +1,42 @@
 ﻿@inject IJSRuntime JSRuntime
+@inject MainViewModel MainViewModel;
+
+@using BlazorServerLASViewer.Domains.Well;
 
 <h3>Well as SVG view</h3>
 
-<svg @onmousemove="@MouseMove" class="WellSVG" width="800" height="600" style="background:rgb(200, 200, 200)">
-
-    @foreach (var log in @Well.Data.Logs)
+<svg @onmousemove="@MouseMove"
+     class="WellSVG"
+     width="800"
+     height="600"
+     style="background:rgb(200, 200, 200)">
+    @foreach(var log in MainViewModel.Logs)
     {
-        <RectangleElement DataContext="@log" ChangeSelected="@ChangeSelected" />
+        <LogSvg log="@log" ChangeSelected="@ChangeSelected"> </LogSvg>
     }
-
 </svg>
-
-@functions{
-    
-    protected override void OnInitialized()
-    {
-        Initialize();
-    }
-
-}
 
 @code {
     [Parameter]
     public Well Well { get; set; }
 
-    public int ContainerX { get; set; } = 0;
-    public int ContainerY { get; set; } = 0;
-    public int ElementX { get; set; } = 0;
-    public int ElementY { get; set; } = 0;
-    public int ContainerMouseX { get; set; } = 0;
-    public int ContainerMouseY { get; set; } = 0;
-    public bool OverChild { get; set; } = false;
-    public int SelectedItem { get; set; } = -1;
-    public List<LogSvg> Logs { get; set; }
-
-    public WellSvg()
-    {
-        Initialize();
-    }
-
     public void MouseMove(MouseEventArgs e)
     {
-        ContainerMouseX = (int)e.ClientX - ContainerX;
-        ContainerMouseY = (int)e.ClientY - ContainerY;
+        MainViewModel.ContainerMouseX = (int)e.ClientX - MainViewModel.ContainerX;
+        MainViewModel.ContainerMouseY = (int)e.ClientY - MainViewModel.ContainerY;
 
-        if (SelectedItem > -1)
+        if ( MainViewModel.SelectedItem > -1 )
         {
-            var r = Logs[SelectedItem - 1];
-            var x = ContainerMouseX - r.OriginalX;
-            var y = ContainerMouseY - r.OriginalY;
+            var logSvgViewRectangle = MainViewModel.Logs[MainViewModel.SelectedItem-1].SvgViewRectangle;
+            var x = MainViewModel.ContainerMouseX - logSvgViewRectangle.OriginalX;
+            var y = MainViewModel.ContainerMouseY - logSvgViewRectangle.OriginalY;
 
-            r.X = x;
-            r.Y = y;
+            logSvgViewRectangle.X = x;
+            logSvgViewRectangle.Y = y;
 
-            ElementX = x;
-            ElementY = y;
+            MainViewModel.ElementX = x;
+            MainViewModel.ElementY = y;
+
         }
     }
 
@@ -69,33 +51,14 @@
     //This is called after OnInitialized
     protected override async void OnAfterRender(bool firstRender)
     {
-        if (firstRender)
+        if(firstRender)
         {
-            //Get SVG Position and Pass to the ViewModel
+            //Get SVG Position and Pass to the ViewModel 
             //method contained in _Host.cshtml
             var raw = await JSRuntime.InvokeAsync<decimal[]>("ContainerPos", null);
-            ContainerX = (int)raw[0];
-            ContainerY = (int)raw[1];
+            MainViewModel.ContainerX = (int)raw[0];
+            MainViewModel.ContainerY = (int)raw[1];
         }
         base.OnAfterRender(firstRender);
-    }
-
-    public void Initialize()
-    {
-        //Random rnd = new Random();
-
-        //Logs = new List<LogSvg>();
-
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    var r = new LogSvg
-        //    {
-        //        RectangleId = i + 1,
-        //        X = (int)rnd.Next(0, 600),
-        //        Y = (int)rnd.Next(0, 600),
-        //    };
-
-        //    Logs.Add(r);
-        //}
     }
 }

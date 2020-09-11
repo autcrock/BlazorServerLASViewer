@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BlazorServerLASViewer.Domains.Well
+﻿namespace BlazorServerLASViewer.Domains.Well
 {
     public class LogHeaderQuadruple
     {
@@ -11,13 +9,13 @@ namespace BlazorServerLASViewer.Domains.Well
 
         public LogHeaderQuadruple(string incoming)
         {
-            var dotSplit = incoming.Split(new char[] { '.' }, 2);
-            var colonSplit = dotSplit[1].Split(new char[] { ':' }, 2);
-            var spaceSplit = colonSplit[0].Split(new char[] { ' ' }, 2);
+            var dotSplit = incoming.Split(new [] { '.' }, 2);
+            var colonSplit = dotSplit[1].Split(new [] { ':' }, 2);
+            var spaceSplit = colonSplit[0].Split(new [] { ' ' }, 2);
             var firstField = dotSplit[0].Trim();
             var secondField = spaceSplit[0].Trim();
-            var thirdField = String.Empty;
-            var fourthField = String.Empty;
+            var thirdField = string.Empty;
+            var fourthField = string.Empty;
             if (spaceSplit.Length > 1) thirdField = spaceSplit[1].Trim();
             if (colonSplit.Length > 1) fourthField = colonSplit[1].Trim();
 

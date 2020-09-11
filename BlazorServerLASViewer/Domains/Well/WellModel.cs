@@ -6,7 +6,7 @@ namespace BlazorServerLASViewer.Domains.Well
     {
         public string ReturnedValue;
         public WellHeader Header;
-        public List<Log> Logs;
+        public List<Log<double>> Logs;
 
         public WellModel()
         {

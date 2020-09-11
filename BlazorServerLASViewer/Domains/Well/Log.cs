@@ -1,8 +1,9 @@
 ﻿namespace BlazorServerLASViewer.Domains.Well
 {
-    public class Log
+    public class Log<T>
     {
-        public LogHeader Header { get; set; }
-        public LogData Data { get; set; }
+        public LogHeaderQuadruple Header { get; set; }
+        public LogDatum<T>[] Data { get; set; }
+        public Rectangle SvgViewRectangle { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace BlazorServerLASViewer.Domains.Well
     public class Well
     {
         public WellHeader Header { set; get; }
-        public LogData Data { set; get; }
+        public LogData<double> DoubleLogs { set; get; }
 
         // Load and parse a LAS file, which only contains numerical well logs.
         // Go the quick and dirty suck it all into memory and string split approach.
@@ -62,7 +62,7 @@ namespace BlazorServerLASViewer.Domains.Well
             var rv = new Well
             {
                 Header = new WellHeader(file.Name),
-                Data = new LogData(
+                DoubleLogs = new LogData<double>(
                     numberOfLogs,
                     segments.Single(segment => segment[0] == 'C'),
                     segments.Single(segment => segment[0] == 'A')
@@ -70,6 +70,32 @@ namespace BlazorServerLASViewer.Domains.Well
             };
 
             return rv;
+        }
+
+        public static List<Log<T>> LogDataToLogs<T>(LogData<T> logData)
+        {
+            var logs = new List<Log<T>>();
+
+            for (int i = 0; i < logData.LogCount; i++)
+            {
+                logs.Add( new Log<T>
+                {
+                    Data = logData.Logs[i],
+                    Header = logData.Headers[i],
+                    SvgViewRectangle = new Rectangle{
+                        RectangleId = i + 1,
+                        X = i*400+1,
+                        Y = 1,
+                        Width = 400,
+                        Height = 700,
+                        R = 255,
+                        G = 255,
+                        B = 255
+                    }
+                });
+            }
+
+            return logs;
         }
     }
 

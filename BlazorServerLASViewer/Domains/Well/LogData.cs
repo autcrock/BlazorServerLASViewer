@@ -8,14 +8,14 @@ namespace BlazorServerLASViewer.Domains.Well
     // A LAS Log has a data section containing well log data in arbitrary quantity,
     // set out as described in the log header.  Each log can be string or doubles represented as strings.
     // This implementation assumes no string logs for the time being.
-    public class LogData
+    public class LogData<T>
     {
         public int LogCount { get; set; }
         public int SampleCount { get; set; }
 
         public LogHeaderQuadruple[] Headers { get; set; }
 
-        public LogDatum<double> [][] Logs { get; set; }
+        public LogDatum<T> [][] Logs { get; set; }
 
         public LogData(int logCount, string logHeadersString, string logValuesString)
         {
@@ -47,50 +47,30 @@ namespace BlazorServerLASViewer.Domains.Well
             LogCount = logCount;
 
             SampleCount = words.Length / LogCount;
-            Logs = new LogDatum<double>[LogCount][];
+            Logs = new LogDatum<T>[LogCount][];
 
             var depthUnits = Headers[0].Units;
             
             for (var logIndex = 0; logIndex < LogCount; logIndex++)
             {
-                Logs[logIndex] = new LogDatum<double>[SampleCount];
+                Logs[logIndex] = new LogDatum<T>[SampleCount];
                 var sampleUnits = Headers[logIndex].Units;
 
                 for (var sampleIndex = 0; sampleIndex < SampleCount; sampleIndex++)
                 {
-                    if (logIndex == 0)
+                    var depthSampleIndex = LogCount * sampleIndex;
+                    var logSampleIndex = depthSampleIndex + logIndex;
+
+                    var sample = (T) Convert.ChangeType(words[logSampleIndex], typeof(T));
+                    var depth = Convert.ToDouble(words[depthSampleIndex]);
+
+                    Logs[logIndex][sampleIndex] = new LogDatum<T>()
                     {
-                        // Depth log in LAS format, treat is specially
-                        var depthSampleIndex = LogCount * sampleIndex;
-                        var logSampleIndex = depthSampleIndex;
-
-                        var sample = Convert.ToDouble(words[logSampleIndex]);
-                        var depth = Convert.ToDouble(words[depthSampleIndex]);
-
-                        Logs[logIndex][sampleIndex] = new LogDatum<double>()
-                        {
-                            Datum = sample,
-                            DatumUnits = sampleUnits,
-                            Depth = depth,
-                            DepthUnits = depthUnits
-                        };
-                    } else
-                    {
-                        var depthSampleIndex = LogCount * sampleIndex;
-                        var logSampleIndex = depthSampleIndex + logIndex;
-
-                        var sample = Convert.ToDouble(words[logSampleIndex]);
-                        var depth = Convert.ToDouble(words[depthSampleIndex]);
-
-                        Logs[logIndex][sampleIndex] = new LogDatum<double>()
-                        {
-                            Datum = sample,
-                            DatumUnits = sampleUnits,
-                            Depth = depth,
-                            DepthUnits = depthUnits
-                        };
-
-                    }
+                        Datum = sample,
+                        DatumUnits = sampleUnits,
+                        Depth = depth,
+                        DepthUnits = depthUnits
+                    };
                 }
             }
         }

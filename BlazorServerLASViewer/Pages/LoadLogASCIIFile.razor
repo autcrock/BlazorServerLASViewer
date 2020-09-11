@@ -1,8 +1,7 @@
 ﻿@page "/loadlogasciilasfile"
+@inject MainViewModel MainViewModel
+
 @using BlazorServerLASViewer.Domains.Well;
-
-@inject WellSvg WellSvg;
-
 
 <h1>Log ASCII (LAS) file loader</h1>
 
@@ -15,7 +14,7 @@
 else
 {
 
-    if (Well == null || Well.Data == null || Well.Data.Headers == null || Well.Data.Logs == null)
+    if (Well == null || Well.DoubleLogs == null || Well.DoubleLogs.Headers == null || Well.DoubleLogs.Logs == null)
     {
         <p>Loading log ASCII format file : @File.Name (@File.Size bytes)</p>
     }
@@ -27,7 +26,11 @@ else
             }
         </style>
 
+        <hr size="2" noshade>
+
         <WellSvg well="@Well"> </WellSvg>
+
+        <hr size="2" noshade>
 
         <table>
             <thead>
@@ -44,33 +47,13 @@ else
                 <tr>
                     <td>@File.Name </td>
                     <td>@File.Size</td>
-                    <td>@Well.Data.Headers.Length</td>
-                    <td>@Well.Data.Logs.Length</td>
+                    <td>@Well.DoubleLogs.Headers.Length</td>
+                    <td>@Well.DoubleLogs.Logs.Length</td>
                     <td>@File.LastModified.ToShortDateString()</td>
                 </tr>
             </tbody>
         </table>
         <WellTable well="@Well"></WellTable>
-
-        <hr size="5" noshade />
-
-        <h3>Movement</h3>
-
-        <div>OverChild: @WellSvg.OverChild</div>
-
-        <div>Cursor Position: @WellSvg.ContainerMouseX,@WellSvg.ContainerMouseY</div>
-
-        <div>
-            Element Id:
-            @if (WellSvg.SelectedItem > -1)
-            {
-                @WellSvg.SelectedItem <span> Element Position:</span> @WellSvg.ElementX <span>,</span>@WellSvg.ElementY
-            }
-            else
-            {
-                <span>none</span>
-            }
-        </div>
 
         @code
         {
@@ -81,6 +64,7 @@ else
             {
                 File = files.FirstOrDefault();
                 Well = await Well.GetWellFromFileListEntryAsync(File);
+                MainViewModel.Logs = Well.LogDataToLogs<double>(Well.DoubleLogs);
             }
 
         }

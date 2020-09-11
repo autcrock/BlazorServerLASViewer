@@ -1,34 +1,72 @@
-﻿@namespace BlazorServerLASViewer.Domains.Well
+﻿@inject IJSRuntime JSRuntime;
+@inject MainViewModel MainViewModel;
+
+@namespace BlazorServerLASViewer.Domains.Well
 <style>
        LogSvg {
             background:rgb(255, 255, 255);
-            height:@Height;
-            width:@Width;
+            height:@Log.SvgViewRectangle.Height;
+            width:@Log.SvgViewRectangle.Width;
         }
 </style>
 
+<g id="@($"Item{Log.SvgViewRectangle.RectangleId}")">
 
-    <svg class="LogSvg">
-        <rect width="@Width" height="@Height" style="background:rgb(255, 255, 255)"></rect>
-    </svg>
+    <rect style="cursor:@pointer;"
+          @onmousemove="MouseMove"
+          @onmousedown="MouseDown"
+          @onmouseup="MouseUp"
+          @onmouseout="MouseOut"
+          x="@Log.SvgViewRectangle.X"
+          y="@Log.SvgViewRectangle.Y" />
+
+    <text style="pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none;"
+          x="@(Log.SvgViewRectangle.X + 4)"
+          y="@(Log.SvgViewRectangle.Y + 20)"
+          fill="black">@Log.SvgViewRectangle.Position</text>
+
+    </g>
+
+
     @code {
+
         [Parameter]
-        public Log log { get; set; }
+        public Log<double> Log { get; set; }
 
-        public const int Width = 100;
-        public const int Height = 700;
+        [Parameter]
+        public Action<string> ChangeSelected { get; set; }
 
-        public int RectangleId { get; set; }
-        public int OriginalX { get; set; }
-        public int OriginalY { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        [Parameter]
+        public string pointer { get; set; } = "pointer";
 
-        public string Position
+        public void MouseDown(MouseEventArgs e)
         {
-            get
+            if (MainViewModel.SelectedItem == -1)
             {
-                return $"{X},{Y}";
+                Log.SvgViewRectangle.OriginalX = (int)e.ClientX - Log.SvgViewRectangle.X - MainViewModel.ContainerX;
+                Log.SvgViewRectangle.OriginalY = (int)e.ClientY - Log.SvgViewRectangle.Y - MainViewModel.ContainerY;
+
+                MainViewModel.SelectedItem = Log.SvgViewRectangle.RectangleId;
+                ChangeSelected?.Invoke($"Item{Log.SvgViewRectangle.RectangleId}");
             }
         }
+
+        public void MouseUp(MouseEventArgs args)
+        {
+            if (MainViewModel.SelectedItem == Log.SvgViewRectangle.RectangleId)
+            {
+                MainViewModel.SelectedItem = -1;
+            }
+        }
+
+        public void MouseOut(MouseEventArgs e)
+        {
+            MainViewModel.OverChild = false;
+        }
+
+        public void MouseMove(MouseEventArgs e)
+        {
+            MainViewModel.OverChild = true;
+        }
+
     }
