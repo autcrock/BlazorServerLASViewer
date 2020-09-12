@@ -22,9 +22,9 @@
 
 <svg @onmousemove="@MouseMove"
      class="WellSVG"
-     width="6000"
-     height="600"
-     style="background:rgb(200, 200, 200)">
+     width="@WellViewModel.WellWidth"
+     height="@WellViewModel.WellHeight"
+     style="background:rgb(@WellViewModel.WellRedComponent,@WellViewModel.WellGreenComponent,@WellViewModel.WellBlueComponent)">
     @foreach (var log in WellViewModel.Logs)
     {
         <LogSvg log="@log" ChangeSelected="@ChangeSelected"> </LogSvg>

@@ -62,8 +62,8 @@ else
             async Task LoadLogASCII(IFileListEntry[] files)
             {
                 File = files.FirstOrDefault();
-                WellViewModel.Well = await Well.GetWellFromFileListEntryAsync(File);
-                WellViewModel.Logs = Well.LogDataToLogs<double>(WellViewModel.Well.DoubleLogs);
+                WellViewModel.Well = await WellViewModel.GetWellFromFileListEntryAsync(File);
+                WellViewModel.Logs = WellViewModel.LogDataToLogs<double>(WellViewModel.Well.DoubleLogs);
             }
 
         }
