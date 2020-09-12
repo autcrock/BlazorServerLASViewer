@@ -13,7 +13,12 @@
 
 <g id="@($"LogGroup{Log.SvgViewRectangle.RectangleId}")">
 
-    <rect style="height:@Log.SvgViewRectangle.Height;width:@Log.SvgViewRectangle.Width;fill:rgb(@Log.SvgViewRectangle.R,@Log.SvgViewRectangle.G,@Log.SvgViewRectangle.B);cursor:pointer;stroke-width:3;stroke:rgb(0,0,0)"
+    <rect style="height:@Log.SvgViewRectangle.Height;
+                    width:@Log.SvgViewRectangle.Width;
+                    fill:rgb(@Log.SvgViewRectangle.R,@Log.SvgViewRectangle.G,@Log.SvgViewRectangle.B);
+                    cursor:@pointer;
+                    stroke-width:@WellViewModel.WellBorderWidth;
+                    stroke:rgb(0,0,0)"
           @onmousemove="MouseMove"
           @onmousedown="MouseDown"
           @onmouseup="MouseUp"
@@ -21,10 +26,16 @@
           x="@Log.SvgViewRectangle.X"
           y="@Log.SvgViewRectangle.Y" />
 
+    <line x1="@HeaderCurveDivideX1"
+          y1="@HeaderCurveDivideY1"
+          x2="@HeaderCurveDivideX2"
+          y2="@HeaderCurveDivideY2"
+          style="pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; stroke: rgb(0,0,0); stroke-width: @WellViewModel.WellBorderWidth" />
+
     <text style="pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none;"
           x="@(Log.SvgViewRectangle.X + 4)"
           y="@(Log.SvgViewRectangle.Y + 20)"
-          fill="black">@Log.SvgViewRectangle.Position</text>
+          fill="black"> @Log.SvgViewRectangle.Position </text>
 
     </g>
 
@@ -39,6 +50,12 @@
 
         [Parameter]
         public string pointer { get; set; } = "pointer";
+
+        private int HeaderCurveDivideX1 => Log.SvgViewRectangle.X;
+        private int HeaderCurveDivideY1 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight; 
+
+        private int HeaderCurveDivideX2 => Log.SvgViewRectangle.X + WellViewModel.LogWidth;
+        private int HeaderCurveDivideY2 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight; 
 
         public void MouseDown(MouseEventArgs e)
         {
