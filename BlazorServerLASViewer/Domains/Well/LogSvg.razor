@@ -26,6 +26,10 @@
           x="@Log.SvgViewRectangle.X"
           y="@Log.SvgViewRectangle.Y" />
 
+    <LogHeaderSvg X="@HeaderLegendX1"
+                  Y="@HeaderLegendY1"
+                  LogMnemonic="@Log.Header.Mnemonic"></LogHeaderSvg>
+
     <line x1="@HeaderCurveDivideX1"
           y1="@HeaderCurveDivideY1"
           x2="@HeaderCurveDivideX2"
@@ -50,6 +54,9 @@
 
         [Parameter]
         public string pointer { get; set; } = "pointer";
+
+        private int HeaderLegendX1 => Log.SvgViewRectangle.X;
+        private int HeaderLegendY1 => Log.SvgViewRectangle.Y;
 
         private int HeaderCurveDivideX1 => Log.SvgViewRectangle.X;
         private int HeaderCurveDivideY1 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight; 

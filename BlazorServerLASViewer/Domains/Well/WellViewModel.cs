@@ -27,7 +27,10 @@ namespace BlazorServerLASViewer.Domains.Well
         public static readonly int LogOffset = LogBorderStroke;
 
         public static readonly int LogHeaderHeight = 100;
+        public static readonly int LogHeaderLegendEntryHeight = 20;
+
         public static readonly int LogCurvesHeight = 600;
+        
         public static readonly int LogWidth = 200;
         public static readonly int LogHeight = LogHeaderHeight + LogBorderStroke + LogCurvesHeight;
 
