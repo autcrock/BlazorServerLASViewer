@@ -28,7 +28,8 @@
 
     <LogHeaderSvg X="@HeaderLegendX1"
                   Y="@HeaderLegendY1"
-                  LogMnemonic="@Log.Header.Mnemonic"></LogHeaderSvg>
+                  LogMnemonic="@Log.Header.Mnemonic"
+                  LogUnits="@Log.Header.Units"></LogHeaderSvg>
 
     <line x1="@HeaderCurveDivideX1"
           y1="@HeaderCurveDivideY1"
@@ -59,10 +60,13 @@
         private int HeaderLegendY1 => Log.SvgViewRectangle.Y;
 
         private int HeaderCurveDivideX1 => Log.SvgViewRectangle.X;
-        private int HeaderCurveDivideY1 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight; 
+        private int HeaderCurveDivideY1 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight;
 
         private int HeaderCurveDivideX2 => Log.SvgViewRectangle.X + WellViewModel.LogWidth;
-        private int HeaderCurveDivideY2 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight; 
+        private int HeaderCurveDivideY2 => Log.SvgViewRectangle.Y + WellViewModel.LogHeaderHeight;
+
+        private int CurveAreaX => Log.SvgViewRectangle.X;
+        private int CurveAreaY => HeaderCurveDivideY1 + WellViewModel.WellBorderWidth;
 
         public void MouseDown(MouseEventArgs e)
         {

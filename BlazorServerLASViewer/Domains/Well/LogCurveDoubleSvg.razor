@@ -12,7 +12,7 @@
                 dominant-baseline="middle"
                 text-anchor="middle"
                 style="fill: black">
-            @LogDescription
+            @LogMnemonic
         </text>
     </svg>
 
@@ -27,9 +27,6 @@
         [Parameter]
         public string LogMnemonic { get; set; }
 
-        [Parameter]
-        public string LogUnits { get; set; }
-
         private int Width => WellViewModel.LogWidth;
         private int Height => WellViewModel.LogHeaderLegendEntryHeight;
 
@@ -37,7 +34,5 @@
         private int R = rnd.Next(0, 255);
         private int G = rnd.Next(0, 255);
         private int B = rnd.Next(0, 255);
-
-        private string LogDescription => LogMnemonic + " [" + LogUnits + "]";
 
     }
