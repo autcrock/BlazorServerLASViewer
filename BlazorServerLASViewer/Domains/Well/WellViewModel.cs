@@ -19,19 +19,27 @@ namespace BlazorServerLASViewer.Domains.Well
         public bool OverChild { get; set; } = false;
         public int SelectedItem { get; set; } = -1;
 
-        public static readonly int WellRedComponent = 200;
-        public static readonly int WellGreenComponent = 200;
-        public static readonly int WellBlueComponent = 200;
-
         public static readonly int LogRedComponent = 255;
         public static readonly int LogGreenComponent = 255;
         public static readonly int LogBlueComponent = 255;
 
-        public static readonly int WellWidth = 2000;
-        public static readonly int WellHeight = 700;
+        public static readonly int LogBorderStroke = 3;
+        public static readonly int LogOffset = LogBorderStroke;
 
-        public static readonly int LogWidth = 400;
-        public static readonly int LogHeight = 400;
+        public static readonly int LogHeaderHeight = 100;
+        public static readonly int LogCurvesHeight = 600;
+        public static readonly int LogWidth = 200;
+        public static readonly int LogHeight = LogHeaderHeight + LogBorderStroke + LogCurvesHeight;
+
+        public static readonly int WellRedComponent = 200;
+        public static readonly int WellGreenComponent = 200;
+        public static readonly int WellBlueComponent = 200;
+
+        public static readonly int WellBorderWidth = 3;
+        public static readonly int WellHeight = LogHeight + 2 * WellBorderWidth;
+
+        public int WellWidth => (LogWidth + 2 * LogBorderStroke) * Logs.Count + WellBorderWidth * 2;
+
 
         public Well Well { get; set; }
         public List<Log<double>> Logs { get; set; }
@@ -49,8 +57,8 @@ namespace BlazorServerLASViewer.Domains.Well
                     SvgViewRectangle = new Rectangle
                     {
                         RectangleId = i + 1,
-                        X = i * LogWidth + 1,
-                        Y = 1,
+                        X = LogOffset + i * (LogWidth + LogBorderStroke + LogOffset),
+                        Y = LogOffset,
                         Width = LogWidth,
                         Height = LogHeight,
                         R = LogRedComponent,
