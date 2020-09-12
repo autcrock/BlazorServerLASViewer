@@ -1,33 +1,45 @@
-﻿@inject IJSRuntime JSRuntime
+﻿@inject IJSRuntime JSRuntime;
 @inject MainViewModel MainViewModel;
 
 @using BlazorServerLASViewer.Domains.Well;
 
 <h3>Well as SVG view</h3>
+<div>OverChild: @MainViewModel.OverChild</div>
+
+<div>Cursor Position: @MainViewModel.ContainerMouseX,@MainViewModel.ContainerMouseY</div>
+
+<div>
+    Element Id:
+    @if (MainViewModel.SelectedItem > -1)
+    {
+        @MainViewModel.SelectedItem <span> Element Position:</span> @MainViewModel.ElementX <span>,</span>@MainViewModel.ElementY
+    }
+    else
+    {
+        <span>none</span>
+    }
+</div>
 
 <svg @onmousemove="@MouseMove"
      class="WellSVG"
-     width="800"
+     width="6000"
      height="600"
      style="background:rgb(200, 200, 200)">
-    @foreach(var log in MainViewModel.Logs)
+    @foreach (var log in MainViewModel.Logs)
     {
         <LogSvg log="@log" ChangeSelected="@ChangeSelected"> </LogSvg>
     }
 </svg>
 
 @code {
-    [Parameter]
-    public Well Well { get; set; }
-
     public void MouseMove(MouseEventArgs e)
     {
         MainViewModel.ContainerMouseX = (int)e.ClientX - MainViewModel.ContainerX;
         MainViewModel.ContainerMouseY = (int)e.ClientY - MainViewModel.ContainerY;
 
-        if ( MainViewModel.SelectedItem > -1 )
+        if (MainViewModel.SelectedItem > -1)
         {
-            var logSvgViewRectangle = MainViewModel.Logs[MainViewModel.SelectedItem-1].SvgViewRectangle;
+            var logSvgViewRectangle = MainViewModel.Logs[MainViewModel.SelectedItem - 1].SvgViewRectangle;
             var x = MainViewModel.ContainerMouseX - logSvgViewRectangle.OriginalX;
             var y = MainViewModel.ContainerMouseY - logSvgViewRectangle.OriginalY;
 
@@ -51,9 +63,9 @@
     //This is called after OnInitialized
     protected override async void OnAfterRender(bool firstRender)
     {
-        if(firstRender)
+        if (firstRender)
         {
-            //Get SVG Position and Pass to the ViewModel 
+            //Get SVG Position and Pass to the ViewModel
             //method contained in _Host.cshtml
             var raw = await JSRuntime.InvokeAsync<decimal[]>("ContainerPos", null);
             MainViewModel.ContainerX = (int)raw[0];

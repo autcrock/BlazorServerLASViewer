@@ -82,12 +82,12 @@ namespace BlazorServerLASViewer.Domains.Well
                 {
                     Data = logData.Logs[i],
                     Header = logData.Headers[i],
-                    SvgViewRectangle = new Rectangle{
+                    SvgViewRectangle = new Rectangle {
                         RectangleId = i + 1,
-                        X = i*400+1,
+                        X = i*100+1,
                         Y = 1,
-                        Width = 400,
-                        Height = 700,
+                        Width  = 200,
+                        Height = 800,
                         R = 255,
                         G = 255,
                         B = 255

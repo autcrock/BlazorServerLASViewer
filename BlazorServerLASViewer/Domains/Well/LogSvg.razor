@@ -1,7 +1,8 @@
-﻿@inject IJSRuntime JSRuntime;
+﻿@namespace BlazorServerLASViewer.Domains.Well
+
+@inject IJSRuntime JSRuntime;
 @inject MainViewModel MainViewModel;
 
-@namespace BlazorServerLASViewer.Domains.Well
 <style>
        LogSvg {
             background:rgb(255, 255, 255);
@@ -10,9 +11,9 @@
         }
 </style>
 
-<g id="@($"Item{Log.SvgViewRectangle.RectangleId}")">
+<g id="@($"LogGroup{Log.SvgViewRectangle.RectangleId}")">
 
-    <rect style="cursor:@pointer;"
+    <rect style="height:@Log.SvgViewRectangle.Height;width:@Log.SvgViewRectangle.Width;fill:rgb(@Log.SvgViewRectangle.R,@Log.SvgViewRectangle.G,@Log.SvgViewRectangle.B);cursor:pointer;stroke-width:3;stroke:rgb(0,0,0)"
           @onmousemove="MouseMove"
           @onmousedown="MouseDown"
           @onmouseup="MouseUp"
@@ -47,7 +48,7 @@
                 Log.SvgViewRectangle.OriginalY = (int)e.ClientY - Log.SvgViewRectangle.Y - MainViewModel.ContainerY;
 
                 MainViewModel.SelectedItem = Log.SvgViewRectangle.RectangleId;
-                ChangeSelected?.Invoke($"Item{Log.SvgViewRectangle.RectangleId}");
+                ChangeSelected?.Invoke($"LogGroup{Log.SvgViewRectangle.RectangleId}");
             }
         }
 

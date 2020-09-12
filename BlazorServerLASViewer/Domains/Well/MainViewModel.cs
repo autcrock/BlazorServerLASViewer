@@ -12,14 +12,8 @@ namespace BlazorServerLASViewer.Domains.Well
         public int ContainerMouseY { get; set; } = 0;
         public bool OverChild { get; set; } = false;
         public int SelectedItem { get; set; } = -1;
+
+        public Well Well { get; set; }
         public List<Log<double>> Logs { get; set; }
-        public MainViewModel()
-        {
-            Initialize();
-        }
-        public void Initialize()
-        {
-            Logs = new List<Log<double>>();
-        }
     }
 }
