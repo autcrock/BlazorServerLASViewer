@@ -2,7 +2,7 @@
 
 namespace BlazorServerLASViewer.Domains.Well
 {
-    public class MainViewModel
+    public class WellViewModel
     {
         public int ContainerX { get; set; } = 0;
         public int ContainerY { get; set; } = 0;

@@ -1,5 +1,5 @@
 ﻿@page "/loadlogasciilasfile"
-@inject MainViewModel MainViewModel
+@inject WellViewModel WellViewModel
 
 @using BlazorServerLASViewer.Domains.Well;
 
@@ -14,7 +14,7 @@
 else
 {
 
-    if (MainViewModel.Well == null || MainViewModel.Well.DoubleLogs == null || MainViewModel.Well.DoubleLogs.Headers == null || MainViewModel.Well.DoubleLogs.Logs == null)
+    if (WellViewModel.Well == null || WellViewModel.Well.DoubleLogs == null || WellViewModel.Well.DoubleLogs.Headers == null || WellViewModel.Well.DoubleLogs.Logs == null)
     {
         <p>Loading log ASCII format file : @File.Name (@File.Size bytes)</p>
     }
@@ -47,13 +47,13 @@ else
                 <tr>
                     <td>@File.Name </td>
                     <td>@File.Size</td>
-                    <td>@MainViewModel.Well.DoubleLogs.Headers.Length</td>
-                    <td>@MainViewModel.Well.DoubleLogs.Logs.Length</td>
+                    <td>@WellViewModel.Well.DoubleLogs.Headers.Length</td>
+                    <td>@WellViewModel.Well.DoubleLogs.Logs.Length</td>
                     <td>@File.LastModified.ToShortDateString()</td>
                 </tr>
             </tbody>
         </table>
-        <WellTable well="@MainViewModel.Well"></WellTable>
+        <WellTable well="@WellViewModel.Well"></WellTable>
 
         @code
         {
@@ -62,8 +62,8 @@ else
             async Task LoadLogASCII(IFileListEntry[] files)
             {
                 File = files.FirstOrDefault();
-                MainViewModel.Well = await Well.GetWellFromFileListEntryAsync(File);
-                MainViewModel.Logs = Well.LogDataToLogs<double>(MainViewModel.Well.DoubleLogs);
+                WellViewModel.Well = await Well.GetWellFromFileListEntryAsync(File);
+                WellViewModel.Logs = Well.LogDataToLogs<double>(WellViewModel.Well.DoubleLogs);
             }
 
         }

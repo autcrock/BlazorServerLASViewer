@@ -24,7 +24,7 @@ namespace BlazorServerLASViewer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WellService>();
-            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<WellViewModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

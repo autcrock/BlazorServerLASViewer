@@ -1,7 +1,7 @@
 ﻿@namespace BlazorServerLASViewer.Domains.Well
 
 @inject IJSRuntime JSRuntime;
-@inject MainViewModel MainViewModel;
+@inject WellViewModel WellViewModel;
 
 <style>
        LogSvg {
@@ -42,32 +42,32 @@
 
         public void MouseDown(MouseEventArgs e)
         {
-            if (MainViewModel.SelectedItem == -1)
+            if (WellViewModel.SelectedItem == -1)
             {
-                Log.SvgViewRectangle.OriginalX = (int)e.ClientX - Log.SvgViewRectangle.X - MainViewModel.ContainerX;
-                Log.SvgViewRectangle.OriginalY = (int)e.ClientY - Log.SvgViewRectangle.Y - MainViewModel.ContainerY;
+                Log.SvgViewRectangle.OriginalX = (int)e.ClientX - Log.SvgViewRectangle.X - WellViewModel.ContainerX;
+                Log.SvgViewRectangle.OriginalY = (int)e.ClientY - Log.SvgViewRectangle.Y - WellViewModel.ContainerY;
 
-                MainViewModel.SelectedItem = Log.SvgViewRectangle.RectangleId;
+                WellViewModel.SelectedItem = Log.SvgViewRectangle.RectangleId;
                 ChangeSelected?.Invoke($"LogGroup{Log.SvgViewRectangle.RectangleId}");
             }
         }
 
         public void MouseUp(MouseEventArgs args)
         {
-            if (MainViewModel.SelectedItem == Log.SvgViewRectangle.RectangleId)
+            if (WellViewModel.SelectedItem == Log.SvgViewRectangle.RectangleId)
             {
-                MainViewModel.SelectedItem = -1;
+                WellViewModel.SelectedItem = -1;
             }
         }
 
         public void MouseOut(MouseEventArgs e)
         {
-            MainViewModel.OverChild = false;
+            WellViewModel.OverChild = false;
         }
 
         public void MouseMove(MouseEventArgs e)
         {
-            MainViewModel.OverChild = true;
+            WellViewModel.OverChild = true;
         }
 
     }
