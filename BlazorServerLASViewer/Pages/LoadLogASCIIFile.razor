@@ -9,54 +9,53 @@
 
 @if (File == null)
 {
-<p> No file selected</p>
+    <p> No file selected</p>
 }
 else
 {
 
     if (WellViewModel.Well == null || WellViewModel.Well.DoubleLogs == null || WellViewModel.Well.DoubleLogs.Headers == null || WellViewModel.Well.DoubleLogs.Logs == null)
     {
-<p>Loading log ASCII format file : @File.Name (@File.Size bytes)</p>
+        <p>Loading log ASCII format file : @File.Name (@File.Size bytes)</p>
     }
     else
     {
-<style>
-    th, td {
-        padding: 5px;
-    }
-</style>
+        <style>
+            th, td {
+                padding: 5px;
+            }
+        </style>
 
-<hr size="2" noshade>
+        <hr size="2" noshade>
 
-<WellSvg> </WellSvg>
+        <WellSvg> </WellSvg>
 
-<hr size="2" noshade>
+        <hr size="2" noshade>
 
-<table>
-    <thead>
-        <tr>
-            <th> File Name </th>
-            <th> File Size </th>
-            <th> Number of Log Headers </th>
-            <th> Number of Logs </th>
-            <th> Last Modified </th>
-        </tr>
-    </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th> File Name </th>
+                    <th> File Size </th>
+                    <th> Number of Log Headers </th>
+                    <th> Number of Logs </th>
+                    <th> Last Modified </th>
+                </tr>
+            </thead>
 
-    <tbody>
-        <tr>
-            <td>@File.Name </td>
-            <td>@File.Size</td>
-            <td>@WellViewModel.Well.DoubleLogs.Headers.Length</td>
-            <td>@WellViewModel.Well.DoubleLogs.Logs.Length</td>
-            <td>@File.LastModified.ToShortDateString()</td>
-        </tr>
-    </tbody>
-</table>
-<WellTable well="@WellViewModel.Well"></WellTable>
+            <tbody>
+                <tr>
+                    <td>@File.Name </td>
+                    <td>@File.Size</td>
+                    <td>@WellViewModel.Well.DoubleLogs.Headers.Length</td>
+                    <td>@WellViewModel.Well.DoubleLogs.Logs.Length</td>
+                    <td>@File.LastModified.ToShortDateString()</td>
+                </tr>
+            </tbody>
+        </table>
+        <WellTable well="@WellViewModel.Well"></WellTable>
 
-@code
-        {
+        @code {
             private IFileListEntry File;
 
             async Task LoadLogASCII(IFileListEntry[] files)
@@ -64,8 +63,17 @@ else
                 File = files.FirstOrDefault();
                 WellViewModel.Well = await WellViewModel.GetWellFromFileListEntryAsync(File);
                 WellViewModel.Logs = WellViewModel.LogDataToLogs<double>(WellViewModel.Well.DoubleLogs);
-            }
 
-}
+                foreach (var log in WellViewModel.Logs)
+                {
+                    var data = log.Data.Select(d=> (double)d.Datum).ToArray<double>();
+                    var depths = log.Data.Select(d => (double)d.Depth).ToArray<double>();
+                    log.MaxDepth = depths.Max();
+                    log.MinDepth = depths.Min();
+                    log.MaxDatum = data.Max();
+                    log.MinDatum = data.Min();
+                }
+            }
+        }
     }
 }

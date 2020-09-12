@@ -1,38 +1,67 @@
 ﻿@namespace BlazorServerLASViewer.Domains.Well
+@using System.Text;
 
-    <svg>
-        <line x1="@X"
-                y1="@(Y+Height/2)"
-                x2="@(X+Width)"
-                y2="@(Y+Height/2)"
-                style="stroke: rgb(@R, @G, @B);
-                        stroke-width: 1"/>
+<svg>
+    <path d=@Curve style="stroke: RGB(@R,@G,@B); stroke-width:1; fill:none; " />
+</svg>
 
-        <text x="@(X+Width/2)" y="@(Y+Height/2)"
-                dominant-baseline="middle"
-                text-anchor="middle"
-                style="fill: black">
-            @LogMnemonic
-        </text>
-    </svg>
+@code {
 
-    @code {
+    [Parameter]
+    public int X { get; set; }
 
-        [Parameter]
-        public int X { get; set; }
+    [Parameter]
+    public int Y { get; set; }
 
-        [Parameter]
-        public int Y { get; set; }
+    [Parameter]
+    public Log<double> LogByDepthData { get; set; }
 
-        [Parameter]
-        public string LogMnemonic { get; set; }
-
-        private int Width => WellViewModel.LogWidth;
-        private int Height => WellViewModel.LogHeaderLegendEntryHeight;
-
-        private static Random rnd = new Random();
-        private int R = rnd.Next(0, 255);
-        private int G = rnd.Next(0, 255);
-        private int B = rnd.Next(0, 255);
-
+    private string Curve
+    {
+        get
+        {
+            var builder = new StringBuilder();
+            var first = true;
+            foreach (var datum in LogByDepthData.Data)
+            {
+                var (normalisedDepth, normalisedDatum) = LogDatumNormalise( datum.Depth, datum.Datum );
+                var transformedDatumAsAbsoluteXPixels = Math.Round(normalisedDatum * WellViewModel.LogWidth + X);
+                var transformedDepthAsAbsoluteYPixels = Math.Round(normalisedDepth * WellViewModel.LogCurvesHeight + Y);
+                builder.Append(
+                    first ? $"M {transformedDatumAsAbsoluteXPixels},{transformedDepthAsAbsoluteYPixels}"
+                           : $" L {transformedDatumAsAbsoluteXPixels},{transformedDepthAsAbsoluteYPixels}"
+                    );
+                first = false;
+            }
+            return builder.ToString();
+        }
     }
+
+    private int Width => WellViewModel.LogWidth;
+    private int Height => WellViewModel.LogHeight;
+
+    private static Random rnd = new Random();
+    private int R = rnd.Next(0, 255);
+    private int G = rnd.Next(0, 255);
+    private int B = rnd.Next(0, 255);
+
+    private double MaxDepth => LogByDepthData.MaxDepth;
+    private double MaxDatum => LogByDepthData.MaxDatum;
+
+    private double MinDepth => LogByDepthData.MinDepth;
+    private double MinDatum => LogByDepthData.MinDatum;
+
+    private double DepthRange => MaxDepth - MinDepth;
+    private double DatumRange => MaxDatum - MinDatum;
+
+    (double, double) LogDatumNormalise (double depth, double datum)
+    {
+        var translatedDepth = depth - MinDepth;
+        var translatedDatum = datum - MinDatum;
+
+        return (
+            DepthRange == 0 ? depth : translatedDepth / DepthRange,
+            DatumRange == 0 ? datum : translatedDatum / DatumRange
+        );
+    }
+}

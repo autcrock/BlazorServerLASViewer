@@ -67,7 +67,11 @@ namespace BlazorServerLASViewer.Domains.Well
                         R = LogRedComponent,
                         G = LogGreenComponent,
                         B = LogBlueComponent
-                    }
+                    },
+                    MaxDepth = Double.MinValue,
+                    MinDepth = Double.MaxValue,
+                    MaxDatum = Double.MinValue,
+                    MinDatum = Double.MaxValue,
                 });
             }
 
