@@ -1,0 +1,180 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-02-10T01:05:09.8465185Z",
+  "analysisEndTime": "2026-02-10T01:05:11.1100105Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 1,
+      "issues": 3,
+      "incidents": 3,
+      "effort": 3
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 2,
+        "Optional": 0,
+        "Potential": 1,
+        "Information": 0
+      },
+      "category": {
+        "NuGet": 1,
+        "Project": 1,
+        "Api": 1
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "BlazorServerLASViewer\\BlazorServerLASViewer.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 3,
+      "properties": {
+        "appName": "BlazorServerLASViewer",
+        "projectKind": "AspNetCore",
+        "frameworks": [
+          "netcoreapp3.1"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 52,
+        "numberOfCodeFiles": 16,
+        "linesTotal": 3144,
+        "linesOfCode": 574,
+        "totalApiScanned": 715,
+        "minLinesOfCodeToChange": 1,
+        "maxLinesOfCodeToChange": 1
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "4a2feb57-3b38-42a3-85b2-6a8b61c86c17",
+          "ruleId": "NuGet.0001",
+          "projectPath": "BlazorServerLASViewer\\BlazorServerLASViewer.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.VisualStudio.Azure.Containers.Tools.Targets, 1.10.9\n\nRecommendation:\n\nNo supported version found",
+              "protected": "Microsoft.VisualStudio.Azure.Containers.Tools.Targets, 1.10.9\n\nRecommendation:\n\nNo supported version found"
+            },
+            "kind": "File",
+            "path": "BlazorServerLASViewer\\BlazorServerLASViewer.csproj",
+            "snippet": "Microsoft.VisualStudio.Azure.Containers.Tools.Targets, 1.10.9\n\nRecommendation:\n\nNo supported version found",
+            "protectedSnippet": "Microsoft.VisualStudio.Azure.Containers.Tools.Targets, 1.10.9\n\nRecommendation:\n\nNo supported version found",
+            "label": "Microsoft.VisualStudio.Azure.Containers.Tools.Targets 1.10.9",
+            "properties": {
+              "PackageId": "Microsoft.VisualStudio.Azure.Containers.Tools.Targets",
+              "PackageVersion": "1.10.9",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "46ef5643-24ad-43f8-a6b2-aff3d394024c",
+          "ruleId": "Project.0002",
+          "projectPath": "BlazorServerLASViewer\\BlazorServerLASViewer.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: netcoreapp3.1\nRecommended target framework: net10.0",
+              "protected": "Current target framework: netcoreapp3.1\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "BlazorServerLASViewer\\BlazorServerLASViewer.csproj",
+            "snippet": "Current target framework: netcoreapp3.1\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: netcoreapp3.1\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "netcoreapp3.1",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "2ef7cafe-ec6e-4ea3-ace1-41a736369bac",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: Exception diagnostics are suppressed when IExceptionHandler.TryHandleAsync returns true ",
+          "projectPath": "BlazorServerLASViewer\\BlazorServerLASViewer.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "app.UseExceptionHandler(\u0022/Error\u0022);",
+              "protected": "M:Microsoft.AspNetCore.Builder.ExceptionHandlerExtensions.UseExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)"
+            },
+            "kind": "File",
+            "path": "BlazorServerLASViewer\\Startup.cs",
+            "snippet": "app.UseExceptionHandler(\u0022/Error\u0022);",
+            "protectedSnippet": "M:Microsoft.AspNetCore.Builder.ExceptionHandlerExtensions.UseExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)",
+            "label": "M:Microsoft.AspNetCore.Builder.ExceptionHandlerExtensions.UseExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/aspnet-core/10/exception-handler-diagnostics-suppressed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 38,
+            "column": 16
+          }
+        }
+      ],
+      "features": []
+    }
+  ],
+  "rules": {
+    "NuGet.0001": {
+      "id": "NuGet.0001",
+      "isFeature": false,
+      "description": "NuGet package is incompatible with selected target framework.\n\nPackage needs to be upgraded to a version supporting selected project target framework. If there no new package versions supporting new target framework, different package needs to be used and all code needs to be upgraded to new API.",
+      "label": "NuGet package is incompatible",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262529",
+          "isCustom": false
+        }
+      ]
+    },
+    "Project.0002": {
+      "id": "Project.0002",
+      "isFeature": false,
+      "description": "Project\u0027s target framework(s) needs to be changed to the new target framework that you selected for this upgrade.\n\nDuring upgrade target framework will be adjusted to corresponding platform when applicable. In some cases project would result in multiple target frameworks after the upgrade if it was using features that now have their own platforms in modern .NET frameworks (windows, iOS, Android etc).",
+      "label": "Project\u0027s target framework(s) needs to be changed",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Overview of porting from .NET Framework to .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET project SDKs",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0003": {
+      "id": "Api.0003",
+      "isFeature": false,
+      "description": "API has a behavioral change in selected .NET version: code and binaries may behave differently at runtime without needing recompilation, but the new behavior might be undesirable and require updates.",
+      "label": "Behavioral change in selected .NET version",
+      "severity": "Potential",
+      "effort": 1
+    }
+  }
+}
